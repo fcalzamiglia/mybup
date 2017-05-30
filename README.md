@@ -47,7 +47,7 @@ If you want to backup the databases locally on the same mysql server, connect to
 ```
 Inside mybup.sh set:
 ```
-MysqlHosts=( localhost )
+DBhost=( localhost )
 ```
 
 ### Backup DBs on a remote machine
@@ -58,7 +58,7 @@ If you need to backup the databases from a remote machine, you have to create a 
 ```
 Inside mybup.sh set:
 ```
-MysqlHosts=( HOST1 HOST2 HOST3 HOST4 )
+DBhosto=( HOST1 HOST2 HOST3 HOST4 )
 ```
 
 ### Example: backups DBs from 5 servers on a remote machine
