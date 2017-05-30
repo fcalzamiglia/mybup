@@ -9,32 +9,34 @@ All databases will be stored in the folder defined by **bckPath** with this stru
 ```
 DataBase/
 ├── host1
-│   ├── host1.database1
-│   ├── host1.database2
-│   ├── host1.database3
-│   ├── host1.database4
-│   └── host1.database5
+│   ├── database1
+│   ├── database2
+│   ├── database3
+│   ├── database4
+│   └── database5
 ├── host2
-│   ├── host2.database1
-│   ├── host2.database2
-│   └── host2.database3
+│   ├── database1
+│   ├── database2
+│   └── database3
 ├── host3
-│   ├── host3.database1
-│   ├── host3.database2
-│   ├── host3.database3
-│   └── host3.database4
-└── host4
-    ├── host4.database1
-    └── host4.database2
+│   ├── database1
+│   ├── database2
+│   ├── database3
+│   └── database4
+├── host4
+│   ├── database1
+│   ├── database2
+└── logs
 ```
 
 ## How to setup mybup.sh
-There are 4 parameters that you have to set:
+There are 5 parameters that you have to set:
 ```
-MysqlHosts=( HOST1 HOST2 HOST3 HOST4 )
-bckPath='/YOUR_BACKUP_PATH/DataBase'
+DBhost=( HOST1 HOST2 HOST3 HOST4 )
 DBuser='USERNAME'
 DBpass='PASSWORD'
+bckPath='/YOUR_BACKUP_PATH/DataBase'
+bckDays='30' #Delete backup older then 'bckDays' days
 ```
 
 ### Backup DBs locally
