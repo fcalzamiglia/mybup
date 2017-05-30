@@ -2,7 +2,7 @@
 #------------------------------------------------------------------------------#
 # mybup
 # Backup all databases from a pool of hosts
-# me@mrw0lfc.com
+# me@mrw0lf.com - federico@cipenso.io
 #------------------------------------------------------------------------------#
 
 # Configure a read-only user on the database server with these commands
