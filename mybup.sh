@@ -98,9 +98,3 @@ printf "%24s%55s\n" "$(date --iso-8601='seconds')" "[Cleaning] - Logs older than
 echo -e "#-----------------------------------------------" >> $bckLOG
 find $bckPath/ -type f -name "mybup*log" -mtime +$bckDays -exec rm -fv {} \; &>> $bckLOG
 echo -e "#-----------------------------------------------" >> $bckLOG
-
-
-
--------------------------------------------------------------------------------
-DB name                       Time      Size      ZIP Size        Dump     ZIP
-c2supporto                     37s       11M      2,1M              OK      OK
