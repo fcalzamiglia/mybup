@@ -18,8 +18,22 @@ bckDays='30' #Delete backup older then 'bckDays' days
 #--------------------------------------
 
 #--- MAIN CODE ------------------------
-bckDate=$(date '+%Y-%m-%d')
-bckLOG=$bckPath/mybup_$bckDate.log
+bckDate=$(date '+%Y-%m-%d_%H%M')
+rm -f $bckPath/mybup.log &> /dev/null
+
+if [ ! -d $bckPath/logs ]
+then
+  mkdir $bckPath/logs
+fi
+
+if [ ! -x $bckPath/logs ]
+then
+  echo -e "$(date --iso-8601='seconds') - [Error] - Unable to access $bckPath/logs... exit\n" > $bckLOG
+  exit 1;
+fi
+
+bckLOG=$bckPath/logs/mybup_$bckDate.log
+ln -s $bckLOG $bckPath/mybup.log
 
 for host in "${DBhost[@]}"
 do
@@ -30,7 +44,7 @@ do
 
    if [ ! -x $bckPath/$host ]
    then
-     echo -e "\n[Error] Unable to access $bckPath/$host... exit\n" > $bckLOG
+     echo -e "$(date --iso-8601='seconds') - [Error] - Unable to access $bckPath/$host... exit\n" > $bckLOG
      exit 1;
    fi
 
@@ -40,9 +54,9 @@ do
      if [ ! -d $bckPath/$host/$db ]
      then
        mkdir $bckPath/$host/$db
-       echo -e "[$host] - $db: Found new DB!" >> $bckLOG
+       echo -e "$(date --iso-8601='seconds') - [$host] - $db: Found new DB!" >> $bckLOG
      fi
-     echo -e "[$host] - $db: executing backup... \c" >> $bckLOG
+     echo -e "$(date --iso-8601='seconds') - [$host] - $db: executing backup... \c" >> $bckLOG
      bckFile=$bckPath/$host/$db/$host'_'$db'_'$bckDate.sql
      mysqldump -h $host -u $DBuser --password=$DBpass $db > $bckFile
      stop=$(date '+%s')
@@ -51,5 +65,17 @@ do
      totTime=$((totTime+bckTime))
      bzip2 $bckFile
    done
-   echo -e "[$host] All databases dumped in $totTime s " >> $bckLOG
+   echo -e "$(date --iso-8601='seconds') - [$host] - All databases dumped in $totTime s " >> $bckLOG
 done
+
+# Delete old backups
+echo -e "\n" >> $bckLOG
+echo -e "$(date --iso-8601='seconds') - [Cleaning] - Dumps older than $bckDays days " >> $bckLOG
+echo -e "#-----------------------------------------------" >> $bckLOG
+find $bckPath/ -type f -name "*.sql.bz2" -mtime +$bckDays -exec rm -fv {} \; &>> $bckLOG
+echo -e "#-----------------------------------------------" >> $bckLOG
+echo -e "\n" >> $bckLOG
+echo -e "$(date --iso-8601='seconds') - [Cleaning] - logs older than $bckDays days " >> $bckLOG
+echo -e "#-----------------------------------------------" >> $bckLOG
+find $bckPath/ -type f -name "mybup*log" -mtime +$bckDays -exec rm -fv {} \; &>> $bckLOG
+echo -e "#-----------------------------------------------" >> $bckLOG
