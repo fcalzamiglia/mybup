@@ -5,7 +5,7 @@ This script can dump all databases from a single sever or a pool of servers.
 
 Before executing the script you should create a user with read-only privilege on the databases that you want to backup.
 
-All databases will be stored in the folder defined by **bckPath** with this structure:
+All databases will be stored in the folder defined by **$bckPath** with this structure:
 ```
 DataBase/
 ├── host1
@@ -58,10 +58,29 @@ If you need to backup the databases from a remote machine, you have to create a 
 ```
 Inside mybup.sh set:
 ```
-DBhosto=( HOST1 HOST2 HOST3 HOST4 )
+DBhost=( HOST1 HOST2 HOST3 HOST4 )
 ```
 
-### Example: backups DBs from 5 servers on a remote machine
+### Output Example
+Logs are stored in **$bckPath/logs** and files older than **$bckDays** will be deleted.
+When you start **mybup** automatically a new symlink **$bckPath/mybup.log** will be created pointing to the last log file into the defined folder: **$bckPath/logs**.
+To check last backup use this command:
+
+```
+tail -f $bckPath/mybup.log
+```
+
+```
+2017-05-30T20:04:44+0200                       [test.cipenso.io] Dumping all DB
+-------------------------------------------------------------------------------
+DB name                         Time    Size      ZIP Size        Dump     ZIP
+-------------------------------------------------------------------------------
+database1                        47s    3,9M          215K          OK      OK
+database2                         9s     17K          2,5K          OK      OK
+                            [test.cipenso.io] - All databases dumped in 56 s
+```
+
+## Example: backups DBs from 5 servers on a remote machine
 
 For example on my setup all servers are reachable using a VPN and I run mybup.sh on a backup machine:
 
